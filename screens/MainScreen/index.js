@@ -9,6 +9,8 @@ const MainScreen = () => {
   const animatedOpacity = useAnimate({
     fromValue: 0,
     toValue: 1,
+    bounce: true,
+    iterations: -1,
     duration: 5000,
   });
   return (
