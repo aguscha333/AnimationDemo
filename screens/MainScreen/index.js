@@ -1,12 +1,19 @@
 import React from 'react';
-import {View} from 'react-native';
+import {Animated, View} from 'react-native';
+
+import useAnimate from '../../hooks/useAnimate';
 
 import styles from './styles';
 
 const MainScreen = () => {
+  const animatedOpacity = useAnimate({
+    fromValue: 0,
+    toValue: 1,
+    duration: 5000,
+  });
   return (
     <View style={styles.container}>
-      <View style={styles.box} />
+      <Animated.View style={[styles.box, {opacity: animatedOpacity}]} />
     </View>
   );
 };
