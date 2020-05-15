@@ -7,16 +7,20 @@ const useAnimate = ({
   bounce = false,
   iterations = 1,
   duration = 200,
-  useNativeDriver = true,
+  useNativeDriver = false,
 }) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
+
+  const baseConfig = {
+    duration,
+    useNativeDriver,
+  };
 
   const animate = () => {
     const sequence = [
       Animated.timing(animatedValue, {
         toValue,
-        duration,
-        useNativeDriver,
+        ...baseConfig,
       }),
     ];
 
@@ -24,7 +28,7 @@ const useAnimate = ({
       sequence.push(
         Animated.timing(animatedValue, {
           toValue: fromValue,
-          duration,
+          ...baseConfig,
         }),
       );
     }
