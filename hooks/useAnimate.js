@@ -7,6 +7,7 @@ const useAnimate = ({
   bounce = false,
   iterations = 1,
   duration = 200,
+  useNativeDriver = true,
 }) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
 
@@ -15,6 +16,7 @@ const useAnimate = ({
       Animated.timing(animatedValue, {
         toValue,
         duration,
+        useNativeDriver,
       }),
     ];
 
