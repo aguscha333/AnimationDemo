@@ -16,7 +16,8 @@ export default StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '700',
-    paddingVertical: 10,
+    paddingTop: 20,
+    paddingBottom: 10,
     color: 'white',
   },
   textInput: {
