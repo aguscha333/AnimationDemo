@@ -27,6 +27,8 @@ const MainScreen = () => {
       <View style={styles.container}>
         <SettingsMenu
           visible={showSettingsMenu}
+          settings={values}
+          close={() => setShowSettingsMenu(false)}
           updateSettings={(settings) => {
             setShowSettingsMenu(false);
             setValues(settings);
