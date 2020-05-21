@@ -7,6 +7,8 @@ import Input from '../Input';
 
 const SettingsMenu = ({updateSettings, visible, settings, close}) => {
   const [duration, setDuration] = useState(settings.duration);
+  const [initialX, setInitialX] = useState(settings.initialX);
+  const [finalX, setFinalX] = useState(settings.finalX);
 
   return (
     <Modal visible={visible} transparent={true} style={styles.modal}>
@@ -17,10 +19,23 @@ const SettingsMenu = ({updateSettings, visible, settings, close}) => {
           </TouchableOpacity>
           <Text style={styles.title}>Settings Screen</Text>
           <Input label="Duration" value={duration} onChangeText={setDuration} />
+          <Input
+            label="Initial x"
+            value={initialX}
+            onChangeText={setInitialX}
+          />
+          <Input label="Final x" value={finalX} onChangeText={setFinalX} />
           <TouchableOpacity
             onPress={() => {
               var durationValue = parseInt(duration);
-              updateSettings({duration: durationValue});
+              var initialXValue = parseInt(initialX);
+              var finalXValue = parseInt(finalX);
+              updateSettings({
+                ...settings,
+                duration: durationValue,
+                initialX: initialXValue,
+                finalX: finalXValue,
+              });
             }}>
             <Text style={styles.updateButton}>Update</Text>
           </TouchableOpacity>

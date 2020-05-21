@@ -10,10 +10,18 @@ import SettingsMenu from '../../components/SettingsMenu';
 
 const MainScreen = () => {
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
-  const [values, setValues] = useState({duration: 200});
+  const [values, setValues] = useState({duration: 200, initialX: 0, finalX: 0});
   const animatedOpacity = useAnimate({
     fromValue: 0,
     toValue: 1,
+    bounce: true,
+    iterations: -1,
+    duration: values.duration,
+  });
+
+  const animatedX = useAnimate({
+    fromValue: values.initialX,
+    toValue: values.finalX,
     bounce: true,
     iterations: -1,
     duration: values.duration,
@@ -34,7 +42,9 @@ const MainScreen = () => {
             setValues(settings);
           }}
         />
-        <Animated.View style={[styles.box, {opacity: animatedOpacity}]} />
+        <Animated.View
+          style={[styles.box, {opacity: animatedOpacity, left: animatedX}]}
+        />
       </View>
     </SafeAreaView>
   );
