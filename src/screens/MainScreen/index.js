@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import {Animated, View, Text} from 'react-native';
-
+import React, {useState} from 'react';
+import {Animated, View, Image} from 'react-native';
+import settingsIcon from '../../assets/settingsIcon/default.png';
 import useAnimate from '../../hooks/useAnimate';
 
 import styles from './styles';
@@ -20,9 +20,9 @@ const MainScreen = () => {
   });
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safeAreaView}>
       <TouchableOpacity onPress={() => setShowSettingsMenu(true)}>
-        <Text>Settings</Text>
+        <Image source={settingsIcon} style={styles.icon} />
       </TouchableOpacity>
       <View style={styles.container}>
         <SettingsMenu
