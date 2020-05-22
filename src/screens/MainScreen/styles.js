@@ -1,10 +1,11 @@
 import {StyleSheet} from 'react-native';
+import {WHITE, GREY, RED} from '../../constants/colors';
 
 export default StyleSheet.create({
   box: {
     width: 100,
     height: 100,
-    backgroundColor: 'red',
+    backgroundColor: RED,
     opacity: 0,
   },
   container: {
@@ -14,11 +15,11 @@ export default StyleSheet.create({
   icon: {
     height: 30,
     width: 30,
-    tintColor: 'white',
+    tintColor: WHITE,
     margin: 15,
   },
   safeAreaView: {
-    backgroundColor: 'grey',
+    backgroundColor: GREY,
     flex: 1,
   },
 });

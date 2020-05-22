@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {BLACK} from '../../constants/colors';
 
 export default StyleSheet.create({
   inputBorder: {
@@ -6,7 +7,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'row',
-    borderColor: 'black',
+    borderColor: BLACK,
     borderRadius: 5,
     borderWidth: 1,
     height: 50,
@@ -18,13 +19,13 @@ export default StyleSheet.create({
     fontWeight: '700',
     paddingTop: 20,
     paddingBottom: 10,
-    color: 'black',
+    color: BLACK,
   },
   textInput: {
     alignSelf: 'stretch',
     flex: 1,
     fontSize: 16,
-    color: 'black',
+    color: BLACK,
     letterSpacing: 0.03,
     lineHeight: 21,
   },

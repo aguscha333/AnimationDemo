@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {WHITE, BLACK} from '../../constants/colors';
 
 export default StyleSheet.create({
   closeButton: {
@@ -10,7 +11,7 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: WHITE,
     borderRadius: 20,
   },
   cross: {
@@ -18,7 +19,7 @@ export default StyleSheet.create({
     padding: 10,
   },
   icon: {
-    tintColor: 'black',
+    tintColor: BLACK,
   },
   leftInput: {
     flex: 2,
@@ -39,14 +40,14 @@ export default StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     paddingBottom: 30,
-    color: 'black',
+    color: BLACK,
   },
   updateButton: {
     overflow: 'hidden',
     marginTop: 50,
     padding: 15,
-    backgroundColor: 'black',
+    backgroundColor: BLACK,
     borderRadius: 10,
-    color: 'white',
+    color: WHITE,
   },
 });
