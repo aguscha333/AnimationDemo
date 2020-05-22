@@ -38,7 +38,7 @@ const useAnimate = ({
     }).start();
   };
 
-  useEffect(animate, [fromValue, toValue, bounce]);
+  useEffect(animate, [fromValue, toValue, bounce, duration]);
 
   return animatedValue;
 };
