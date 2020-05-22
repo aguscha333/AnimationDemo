@@ -13,6 +13,7 @@ const Input = ({label, onChangeText, value}) => {
           onChangeText={onChangeText}
           value={value}
           style={styles.textInput}
+          keyboardType="numeric"
         />
       </View>
     </>
