@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Animated, View, Image} from 'react-native';
 import settingsIcon from '../../assets/settingsIcon/default.png';
 import useAnimate from '../../hooks/useAnimate';
+import useAnimateParallel from '../../hooks/useAnimateParallel';
 
 import styles from './styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -13,32 +14,34 @@ const MainScreen = () => {
   const [values, setValues] = useState({
     duration: 200,
     initialX: 0,
-    finalX: 0,
+    finalX: 100,
     initialY: 0,
-    finalY: 0,
+    finalY: 100,
   });
+
   const animatedOpacity = useAnimate({
     fromValue: 0,
     toValue: 1,
-    bounce: true,
-    iterations: -1,
     duration: values.duration,
   });
 
   const animatedX = useAnimate({
     fromValue: values.initialX,
     toValue: values.finalX,
-    bounce: true,
-    iterations: -1,
     duration: values.duration,
   });
 
   const animatedY = useAnimate({
     fromValue: values.initialY,
     toValue: values.finalY,
-    bounce: true,
-    iterations: -1,
+
     duration: values.duration,
+  });
+
+  useAnimateParallel({
+    animations: [animatedOpacity, animatedX, animatedY],
+    iterations: -1,
+    bounce: true,
   });
 
   return (
@@ -59,7 +62,11 @@ const MainScreen = () => {
         <Animated.View
           style={[
             styles.box,
-            {opacity: animatedOpacity, left: animatedX, top: animatedY},
+            {
+              opacity: animatedOpacity.animatedValue,
+              left: animatedX.animatedValue,
+              top: animatedY.animatedValue,
+            },
           ]}
         />
       </View>

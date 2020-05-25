@@ -8,39 +8,41 @@ const useAnimate = ({
   iterations = 1,
   duration = 200,
   useNativeDriver = false,
+  name,
 }) => {
-  const animatedValue = useRef(new Animated.Value(0)).current;
+  const animatedValue = useRef(new Animated.Value(fromValue)).current;
 
   const baseConfig = {
     duration,
     useNativeDriver,
   };
 
-  const animate = () => {
-    const sequence = [
+  const sequence = [
+    Animated.timing(animatedValue, {
+      toValue,
+      ...baseConfig,
+    }),
+  ];
+
+  if (bounce) {
+    sequence.push(
       Animated.timing(animatedValue, {
-        toValue,
+        toValue: fromValue,
         ...baseConfig,
       }),
-    ];
+    );
+  }
 
-    if (bounce) {
-      sequence.push(
-        Animated.timing(animatedValue, {
-          toValue: fromValue,
-          ...baseConfig,
-        }),
-      );
-    }
+  const sequenceAnimation = Animated.sequence(sequence);
 
-    Animated.loop(Animated.sequence(sequence), {
-      iterations,
-    }).start();
-  };
+  const animation =
+    iterations === 1
+      ? sequenceAnimation
+      : Animated.loop(sequenceAnimation, {
+          iterations,
+        });
 
-  useEffect(animate, [fromValue, toValue, bounce, duration]);
-
-  return animatedValue;
+  return {animation, animatedValue};
 };
 
 export default useAnimate;
