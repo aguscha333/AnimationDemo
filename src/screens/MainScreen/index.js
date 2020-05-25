@@ -22,26 +22,27 @@ const MainScreen = () => {
   const animatedOpacity = useAnimate({
     fromValue: 0,
     toValue: 1,
+    bounce: true,
     duration: values.duration,
   });
 
   const animatedX = useAnimate({
     fromValue: values.initialX,
     toValue: values.finalX,
+    bounce: true,
     duration: values.duration,
   });
 
   const animatedY = useAnimate({
     fromValue: values.initialY,
     toValue: values.finalY,
-
+    bounce: true,
     duration: values.duration,
   });
 
   useAnimateParallel({
     animations: [animatedOpacity, animatedX, animatedY],
     iterations: -1,
-    bounce: true,
   });
 
   return (
