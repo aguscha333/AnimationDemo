@@ -24,6 +24,7 @@ const MainScreen = () => {
     toValue: 1,
     bounce: true,
     duration: values.duration,
+    animate: false,
   });
 
   const animatedX = useAnimate({
@@ -31,6 +32,7 @@ const MainScreen = () => {
     toValue: values.finalX,
     bounce: true,
     duration: values.duration,
+    animate: false,
   });
 
   const animatedY = useAnimate({
@@ -38,6 +40,7 @@ const MainScreen = () => {
     toValue: values.finalY,
     bounce: true,
     duration: values.duration,
+    animate: false,
   });
 
   useAnimateParallel({

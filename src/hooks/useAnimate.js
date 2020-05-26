@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useCallback} from 'react';
 import {Animated} from 'react-native';
 
 const useAnimate = ({
@@ -8,7 +8,7 @@ const useAnimate = ({
   iterations = 1,
   duration = 200,
   useNativeDriver = false,
-  name,
+  animate = true,
 }) => {
   const animatedValue = useRef(new Animated.Value(fromValue)).current;
 
@@ -41,6 +41,19 @@ const useAnimate = ({
       : Animated.loop(sequenceAnimation, {
           iterations,
         });
+
+  const startAnimating = useCallback(() => {
+    animate && animation.start();
+  }, [animate, animation]);
+
+  useEffect(startAnimating, [
+    fromValue,
+    toValue,
+    bounce,
+    duration,
+    animate,
+    startAnimating,
+  ]);
 
   return {animation, animatedValue};
 };
