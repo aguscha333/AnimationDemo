@@ -2,8 +2,8 @@ import {useEffect, useRef, useCallback} from 'react';
 import {Animated} from 'react-native';
 
 const useAnimate = ({
-  fromValue,
-  toValue,
+  fromValue = 0,
+  toValue = 1,
   bounce = false,
   iterations = 1,
   duration = 200,
@@ -55,7 +55,13 @@ const useAnimate = ({
     startAnimating,
   ]);
 
-  return {animation, animatedValue};
+  const interpolate = ({inputRange, outputRange}) =>
+    animatedValue.interpolate({
+      inputRange: inputRange || [fromValue, toValue],
+      outputRange,
+    });
+
+  return {animation, interpolate, animatedValue};
 };
 
 export default useAnimate;
