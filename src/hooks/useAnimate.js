@@ -1,46 +1,67 @@
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useCallback} from 'react';
 import {Animated} from 'react-native';
 
 const useAnimate = ({
-  fromValue,
-  toValue,
+  fromValue = 0,
+  toValue = 1,
   bounce = false,
   iterations = 1,
   duration = 200,
   useNativeDriver = false,
+  animate = true,
 }) => {
-  const animatedValue = useRef(new Animated.Value(0)).current;
+  const animatedValue = useRef(new Animated.Value(fromValue)).current;
 
   const baseConfig = {
     duration,
     useNativeDriver,
   };
 
-  const animate = () => {
-    const sequence = [
+  const sequence = [
+    Animated.timing(animatedValue, {
+      toValue,
+      ...baseConfig,
+    }),
+  ];
+
+  if (bounce) {
+    sequence.push(
       Animated.timing(animatedValue, {
-        toValue,
+        toValue: fromValue,
         ...baseConfig,
       }),
-    ];
+    );
+  }
 
-    if (bounce) {
-      sequence.push(
-        Animated.timing(animatedValue, {
-          toValue: fromValue,
-          ...baseConfig,
-        }),
-      );
-    }
+  const sequenceAnimation = Animated.sequence(sequence);
 
-    Animated.loop(Animated.sequence(sequence), {
-      iterations,
-    }).start();
-  };
+  const animation =
+    iterations === 1
+      ? sequenceAnimation
+      : Animated.loop(sequenceAnimation, {
+          iterations,
+        });
 
-  useEffect(animate, [fromValue, toValue, bounce, duration]);
+  const startAnimating = useCallback(() => {
+    animate && animation.start();
+  }, [animate, animation]);
 
-  return animatedValue;
+  useEffect(startAnimating, [
+    fromValue,
+    toValue,
+    bounce,
+    duration,
+    animate,
+    startAnimating,
+  ]);
+
+  const interpolate = ({inputRange, outputRange}) =>
+    animatedValue.interpolate({
+      inputRange: inputRange || [fromValue, toValue],
+      outputRange,
+    });
+
+  return {animation, interpolate, animatedValue};
 };
 
 export default useAnimate;
