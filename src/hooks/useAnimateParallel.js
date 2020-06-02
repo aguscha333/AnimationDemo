@@ -1,9 +1,8 @@
-import {useEffect, useRef} from 'react';
+import {useEffect} from 'react';
 import {Animated} from 'react-native';
 
 const useAnimateParallel = ({animations, iterations, bounce}) => {
   const realAnimations = animations.map(({animation}) => {
-    debugger;
     return animation;
   });
 
