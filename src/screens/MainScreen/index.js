@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {Animated, View, Image} from 'react-native';
 import settingsIcon from '../../assets/settingsIcon/default.png';
 import useAnimate from '../../hooks/useAnimate';
@@ -11,12 +11,30 @@ import SettingsMenu from '../../components/SettingsMenu';
 
 const MainScreen = () => {
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
+
+  const randomColor = () => {
+    return (
+      'rgb(' +
+      Math.floor(Math.random() * 256) +
+      ',' +
+      Math.floor(Math.random() * 256) +
+      ',' +
+      Math.floor(Math.random() * 256) +
+      ')'
+    );
+  };
+
   const [values, setValues] = useState({
     duration: 300,
     initialX: 0,
     finalX: 100,
     initialY: 0,
     finalY: 100,
+  });
+
+  const [animatedColors, setAnimatedColors] = useState({
+    initialColor: randomColor(),
+    finalColor: randomColor(),
   });
 
   const animateConfig = {
@@ -26,7 +44,7 @@ const MainScreen = () => {
   };
 
   const animatedOpacity = useAnimate({
-    fromValue: 0,
+    fromValue: 1,
     toValue: 1,
     ...animateConfig,
   });
@@ -44,13 +62,25 @@ const MainScreen = () => {
   });
 
   const animatedRotation = useAnimate({
-    animate: true,
     iterations: -1,
     duration: 800,
+    animate: false,
+  });
+
+  const colorAnimation = useAnimate({
+    duration: 1200,
+    iterations: -1,
+    bounce: true,
+    callback: () => {
+      setAnimatedColors({
+        initialColor: animatedColors.finalColor,
+        finalColor: randomColor(),
+      });
+    },
   });
 
   useAnimateParallel({
-    animations: [animatedOpacity, animatedX, animatedY],
+    animations: [animatedOpacity, animatedX, animatedY, animatedRotation],
     iterations: -1,
   });
 
@@ -76,6 +106,12 @@ const MainScreen = () => {
               opacity: animatedOpacity.animatedValue,
               left: animatedX.animatedValue,
               top: animatedY.animatedValue,
+              backgroundColor: colorAnimation.interpolate({
+                outputRange: [
+                  animatedColors.initialColor,
+                  animatedColors.finalColor,
+                ],
+              }),
               transform: [
                 {
                   rotate: animatedRotation.interpolate({

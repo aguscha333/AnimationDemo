@@ -9,7 +9,9 @@ const useAnimate = ({
   duration = 200,
   useNativeDriver = false,
   animate = true,
+  callback,
 }) => {
+  let leftIterations = useRef(iterations);
   const animatedValue = useRef(new Animated.Value(fromValue)).current;
 
   const baseConfig = {
@@ -35,18 +37,27 @@ const useAnimate = ({
 
   const sequenceAnimation = Animated.sequence(sequence);
 
+  const interpolate = useCallback(
+    ({inputRange, outputRange}) =>
+      animatedValue.interpolate({
+        inputRange: inputRange || [fromValue, toValue],
+        outputRange,
+      }),
+    [animatedValue, fromValue, toValue],
+  );
+
   const animation =
-    iterations === 1
+    iterations === 1 || callback
       ? sequenceAnimation
       : Animated.loop(sequenceAnimation, {
           iterations,
         });
 
-  const startAnimating = useCallback(() => {
-    animate && animation.start();
-  }, [animate, animation]);
+  const startAnimating = animation.start(() => {
+    callback && callback();
+  });
 
-  useEffect(startAnimating, [
+  useEffect(() => animate && startAnimating, [
     fromValue,
     toValue,
     bounce,
@@ -54,12 +65,6 @@ const useAnimate = ({
     animate,
     startAnimating,
   ]);
-
-  const interpolate = ({inputRange, outputRange}) =>
-    animatedValue.interpolate({
-      inputRange: inputRange || [fromValue, toValue],
-      outputRange,
-    });
 
   return {animation, interpolate, animatedValue};
 };
