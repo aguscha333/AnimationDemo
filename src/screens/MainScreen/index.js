@@ -63,12 +63,10 @@ const MainScreen = () => {
 
   const animatedRotation = useAnimate({
     iterations: -1,
-    duration: 800,
     animate: false,
   });
 
   const colorAnimation = useAnimate({
-    duration: 1200,
     iterations: -1,
     bounce: true,
     callback: () => {

@@ -6,7 +6,7 @@ const useAnimate = ({
   toValue = 1,
   bounce = false,
   iterations = 1,
-  duration = 200,
+  duration = 800,
   useNativeDriver = false,
   animate = true,
   callback,
