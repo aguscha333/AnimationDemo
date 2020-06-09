@@ -6,11 +6,11 @@ import styles from './styles';
 import Input from '../Input';
 
 const SettingsMenu = ({updateSettings, visible, settings, close}) => {
-  const [duration, setDuration] = useState(settings.duration);
-  const [initialX, setInitialX] = useState(settings.initialX);
-  const [finalX, setFinalX] = useState(settings.finalX);
-  const [initialY, setInitialY] = useState(settings.initialY);
-  const [finalY, setFinalY] = useState(settings.finalY);
+  const [duration, setDuration] = useState(settings.duration.toString());
+  const [initialX, setInitialX] = useState(settings.initialX.toString());
+  const [finalX, setFinalX] = useState(settings.finalX.toString());
+  const [initialY, setInitialY] = useState(settings.initialY.toString());
+  const [finalY, setFinalY] = useState(settings.finalY.toString());
 
   return (
     <Modal
@@ -23,16 +23,12 @@ const SettingsMenu = ({updateSettings, visible, settings, close}) => {
             <Image source={cross} style={styles.icon} resizeMode="cover" />
           </TouchableOpacity>
           <Text style={styles.title}>Settings</Text>
-          <Input
-            label="Duration"
-            value={`${duration}`}
-            onChangeText={setDuration}
-          />
+          <Input label="Duration" value={duration} onChangeText={setDuration} />
           <View style={styles.row}>
             <View style={styles.leftInput}>
               <Input
                 label="Initial x"
-                value={`${initialX}`}
+                value={initialX}
                 onChangeText={setInitialX}
               />
             </View>
@@ -48,16 +44,12 @@ const SettingsMenu = ({updateSettings, visible, settings, close}) => {
             <View style={styles.leftInput}>
               <Input
                 label="Initial y"
-                value={`${initialY}`}
+                value={initialY}
                 onChangeText={setInitialY}
               />
             </View>
             <View style={styles.rightInput}>
-              <Input
-                label="Final y"
-                value={`${finalY}`}
-                onChangeText={setFinalY}
-              />
+              <Input label="Final y" value={finalY} onChangeText={setFinalY} />
             </View>
           </View>
           <TouchableOpacity

@@ -1,4 +1,4 @@
-import {useEffect, useRef, useCallback} from 'react';
+import {useEffect, useRef, useCallback, useMemo} from 'react';
 import {Animated} from 'react-native';
 
 const useAnimate = ({
@@ -11,35 +11,71 @@ const useAnimate = ({
   animate = true,
   callback,
 }) => {
-  let leftIterations = useRef(iterations);
-  const animatedValue = useRef(new Animated.Value(fromValue)).current;
-
+  let animatedValue = useRef(new Animated.Value(fromValue));
+  let sequence = useRef([]);
   const baseConfig = {
     duration,
     useNativeDriver,
   };
 
-  const sequence = [
-    Animated.timing(animatedValue, {
+  useEffect(() => {
+    animatedValue.current = new Animated.Value(fromValue);
+  }, [fromValue]);
+
+  useEffect(() => {
+    console.log(animatedValue.current);
+  }, [fromValue]);
+  // useEffect(() => {
+  //   console.log(fromValue);
+  // }, [fromValue]);
+  // useEffect(() => {
+  //   console.log(toValue);
+  // }, [toValue]);
+  // useEffect(() => {
+  //   console.log(bounce);
+  // }, [bounce]);
+  // useEffect(() => {
+  //   console.log(baseConfig);
+  // }, [baseConfig]);
+
+  // useEffect(() => {
+  //   sequence.current = [
+  //     Animated.timing(animatedValue.current, {
+  //       toValue,
+  //       ...baseConfig,
+  //     }),
+  //   ];
+
+  //   if (bounce) {
+  //     sequence.current.push(
+  //       Animated.timing(animatedValue.current, {
+  //         toValue: fromValue,
+  //         ...baseConfig,
+  //       }),
+  //     );
+  //   }
+  // }, [animatedValue, fromValue, toValue, bounce, baseConfig]);
+
+  sequence.current = [
+    Animated.timing(animatedValue.current, {
       toValue,
       ...baseConfig,
     }),
   ];
 
   if (bounce) {
-    sequence.push(
-      Animated.timing(animatedValue, {
+    sequence.current.push(
+      Animated.timing(animatedValue.current, {
         toValue: fromValue,
         ...baseConfig,
       }),
     );
   }
-
-  const sequenceAnimation = Animated.sequence(sequence);
+  const sequenceAnimation = Animated.sequence(sequence.current);
 
   const interpolate = useCallback(
     ({inputRange, outputRange}) =>
-      animatedValue.interpolate({
+      animatedValue.current.interpolate({
         inputRange: inputRange || [fromValue, toValue],
         outputRange,
       }),
@@ -53,20 +89,27 @@ const useAnimate = ({
           iterations,
         });
 
-  const startAnimating = animation.start(() => {
-    callback && callback();
-  });
+  // const animation = useMemo(() => {
+  //   return iterations === 1 || callback
+  //     ? sequenceAnimation
+  //     : Animated.loop(sequenceAnimation, {
+  //         iterations,
+  //       });
+  // }, [animatedValue, callback, iterations, sequenceAnimation]);
 
-  useEffect(() => animate && startAnimating, [
-    fromValue,
-    toValue,
-    bounce,
-    duration,
-    animate,
-    startAnimating,
-  ]);
+  const startAnimating = useCallback(() => {
+    animation.start(() => {
+      // callback && callback();
+    });
+  }, [animation]);
 
-  return {animation, interpolate, animatedValue};
+  useEffect(() => {
+    // console.log('fromValue: ', fromValue);
+    // console.log('toValue: ', toValue);
+    animate && startAnimating && startAnimating();
+  }, [fromValue, toValue, bounce, duration, animate, startAnimating]);
+
+  return {animation, interpolate, animatedValue: animatedValue.current};
 };
 
 export default useAnimate;

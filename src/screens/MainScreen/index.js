@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Animated, View, Image} from 'react-native';
 import settingsIcon from '../../assets/settingsIcon/default.png';
 import useAnimate from '../../hooks/useAnimate';
@@ -25,7 +25,7 @@ const MainScreen = () => {
   };
 
   const [values, setValues] = useState({
-    duration: 300,
+    duration: 1000,
     initialX: 0,
     finalX: 100,
     initialY: 0,
@@ -40,14 +40,15 @@ const MainScreen = () => {
   const animateConfig = {
     bounce: true,
     duration: values.duration,
-    animate: false,
+    animate: true,
+    iterations: -1,
   };
 
-  const animatedOpacity = useAnimate({
-    fromValue: 1,
-    toValue: 1,
-    ...animateConfig,
-  });
+  // const animatedOpacity = useAnimate({
+  //   fromValue: 1,
+  //   toValue: 1,
+  //   ...animateConfig,
+  // });
 
   const animatedX = useAnimate({
     fromValue: values.initialX,
@@ -61,27 +62,39 @@ const MainScreen = () => {
     ...animateConfig,
   });
 
-  const animatedRotation = useAnimate({
-    iterations: -1,
-    animate: false,
-  });
+  // const animatedRotation = useAnimate({
+  //   ...animateConfig,
+  // });
 
-  const colorAnimation = useAnimate({
-    iterations: -1,
-    bounce: true,
-    callback: () => {
-      setAnimatedColors({
-        initialColor: animatedColors.finalColor,
-        finalColor: randomColor(),
-      });
-    },
-  });
+  // const colorAnimationCallback = useCallback(() => {
+  //   setAnimatedColors({
+  //     initialColor: animatedColors.finalColor,
+  //     finalColor: randomColor(),
+  //   });
+  // }, [animatedColors.finalColor]);
 
-  useAnimateParallel({
-    animations: [animatedOpacity, animatedX, animatedY, animatedRotation],
-    iterations: -1,
-  });
+  // const colorAnimation = useAnimate({
+  //   // iterations: -1,
+  //   ...animateConfig,
+  // });
 
+  // useAnimateParallel({
+  //   animations: [
+  //     // animatedOpacity,
+  //     animatedX,
+  //     animatedY,
+  //     // animatedRotation,
+  //     // colorAnimation,
+  //   ],
+  //   iterations: -1,
+  // });
+
+  const updateSettings = useCallback((settings) => {
+    setValues(settings);
+    setShowSettingsMenu(false);
+  }, []);
+
+  // console.log(values);
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <TouchableOpacity onPress={() => setShowSettingsMenu(true)}>
@@ -92,31 +105,28 @@ const MainScreen = () => {
           visible={showSettingsMenu}
           settings={values}
           close={() => setShowSettingsMenu(false)}
-          updateSettings={(settings) => {
-            setShowSettingsMenu(false);
-            setValues(settings);
-          }}
+          updateSettings={updateSettings}
         />
         <Animated.View
           style={[
             styles.box,
             {
-              opacity: animatedOpacity.animatedValue,
+              // opacity: animatedOpacity.animatedValue,
               left: animatedX.animatedValue,
               top: animatedY.animatedValue,
-              backgroundColor: colorAnimation.interpolate({
-                outputRange: [
-                  animatedColors.initialColor,
-                  animatedColors.finalColor,
-                ],
-              }),
-              transform: [
-                {
-                  rotate: animatedRotation.interpolate({
-                    outputRange: ['0deg', '360deg'],
-                  }),
-                },
-              ],
+              // backgroundColor: colorAnimation.interpolate({
+              //   outputRange: [
+              //     animatedColors.initialColor,
+              //     animatedColors.finalColor,
+              //   ],
+              // }),
+              // transform: [
+              //   {
+              //     rotate: animatedRotation.interpolate({
+              //       outputRange: ['0deg', '360deg'],
+              //     }),
+              //   },
+              // ],
             },
           ]}
         />

@@ -6,7 +6,7 @@ export default StyleSheet.create({
     width: 100,
     height: 100,
     backgroundColor: RED,
-    opacity: 0,
+    // opacity: 0,
   },
   container: {
     flex: 1,
