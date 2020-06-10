@@ -11,11 +11,11 @@ const _useAnimate = ({
   const realAnimations = animations.map(({animation}) => {
     return animation;
   });
-
+  const animationType = isParallel ? 'parallel' : 'sequence';
   const parallelAnimation =
     iterations === 1
-      ? Animated[isParallel ? 'parallel' : 'sequence'](realAnimations)
-      : Animated.loop(Animated.parallel(realAnimations), {iterations});
+      ? Animated[animationType](realAnimations)
+      : Animated.loop(Animated[animationType](realAnimations), {iterations});
 
   const startAnimating = useCallback(() => {
     parallelAnimation.start(callback);

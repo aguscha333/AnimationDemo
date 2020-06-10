@@ -1,17 +1,17 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {Animated} from 'react-native';
 
-import {randomColor} from '../../../utils';
+import {randomColor, WIDTH, HEIGHT, STATUS_BAR_HEIGHT} from '../../../utils';
 import {useAnimate, useAnimateParallel} from '../../../hooks';
-import styles from './styles';
+import styles, {BOX_SIZE} from './styles';
 
 const ParallelAnimatedBox = () => {
   const firstValues = {
     duration: 1000,
     initialX: 0,
-    finalX: 100,
+    finalX: WIDTH - BOX_SIZE,
     initialY: 0,
-    finalY: 100,
+    finalY: HEIGHT / 2 - BOX_SIZE - STATUS_BAR_HEIGHT,
   };
 
   const [animatedColors, setAnimatedColors] = useState({
