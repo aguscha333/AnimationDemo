@@ -11,9 +11,7 @@ const useAnimate = ({
   animate = true,
   callback,
 }) => {
-  let leftIterations = useRef(iterations);
   const animatedValue = useRef(new Animated.Value(fromValue)).current;
-
   const baseConfig = {
     duration,
     useNativeDriver,
@@ -34,7 +32,6 @@ const useAnimate = ({
       }),
     );
   }
-
   const sequenceAnimation = Animated.sequence(sequence);
 
   const interpolate = useCallback(
@@ -53,18 +50,15 @@ const useAnimate = ({
           iterations,
         });
 
-  const startAnimating = animation.start(() => {
-    callback && callback();
-  });
+  const startAnimating = useCallback(() => {
+    animation.start(() => {
+      callback && callback();
+    });
+  }, [animation, callback]);
 
-  useEffect(() => animate && startAnimating, [
-    fromValue,
-    toValue,
-    bounce,
-    duration,
-    animate,
-    startAnimating,
-  ]);
+  useEffect(() => {
+    animate && startAnimating && startAnimating();
+  }, [fromValue, toValue, bounce, duration, animate, startAnimating]);
 
   return {animation, interpolate, animatedValue};
 };
