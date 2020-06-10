@@ -11,14 +11,14 @@ const useAnimate = ({
   animate = true,
   callback,
 }) => {
-  const animatedValue = useRef(new Animated.Value(fromValue));
+  const animatedValue = useRef(new Animated.Value(fromValue)).current;
   const baseConfig = {
     duration,
     useNativeDriver,
   };
 
   const sequence = [
-    Animated.timing(animatedValue.current, {
+    Animated.timing(animatedValue, {
       toValue,
       ...baseConfig,
     }),
@@ -26,7 +26,7 @@ const useAnimate = ({
 
   if (bounce) {
     sequence.push(
-      Animated.timing(animatedValue.current, {
+      Animated.timing(animatedValue, {
         toValue: fromValue,
         ...baseConfig,
       }),
@@ -36,7 +36,7 @@ const useAnimate = ({
 
   const interpolate = useCallback(
     ({inputRange, outputRange}) =>
-      animatedValue.current.interpolate({
+      animatedValue.interpolate({
         inputRange: inputRange || [fromValue, toValue],
         outputRange,
       }),
@@ -60,7 +60,7 @@ const useAnimate = ({
     animate && startAnimating && startAnimating();
   }, [fromValue, toValue, bounce, duration, animate, startAnimating]);
 
-  return {animation, interpolate, animatedValue: animatedValue.current};
+  return {animation, interpolate, animatedValue};
 };
 
 export default useAnimate;
