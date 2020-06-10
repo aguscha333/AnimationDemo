@@ -1,17 +1,12 @@
 import React, {useCallback, useState} from 'react';
-import {Animated, View, Image} from 'react-native';
-import settingsIcon from '../../assets/settingsIcon/default.png';
+import {Animated, View} from 'react-native';
 import useAnimate from '../../hooks/useAnimate';
 import useAnimateParallel from '../../hooks/useAnimateParallel';
 
 import styles from './styles';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import SettingsMenu from '../../components/SettingsMenu';
 
 const MainScreen = () => {
-  const [showSettingsMenu, setShowSettingsMenu] = useState(false);
-
   const randomColor = () => {
     return (
       'rgb(' +
@@ -24,13 +19,13 @@ const MainScreen = () => {
     );
   };
 
-  const [values, setValues] = useState({
+  const values = {
     duration: 1000,
     initialX: 0,
     finalX: 100,
     initialY: 0,
     finalY: 100,
-  });
+  };
 
   const [animatedColors, setAnimatedColors] = useState({
     initialColor: randomColor(),
@@ -44,12 +39,6 @@ const MainScreen = () => {
     iterations: -1,
   };
 
-  // const animatedOpacity = useAnimate({
-  //   fromValue: 1,
-  //   toValue: 1,
-  //   ...animateConfig,
-  // });
-
   const animatedX = useAnimate({
     fromValue: values.initialX,
     toValue: values.finalX,
@@ -62,71 +51,47 @@ const MainScreen = () => {
     ...animateConfig,
   });
 
-  // const animatedRotation = useAnimate({
-  //   ...animateConfig,
-  // });
+  const animatedRotation = useAnimate(animateConfig);
 
-  // const colorAnimationCallback = useCallback(() => {
-  //   setAnimatedColors({
-  //     initialColor: animatedColors.finalColor,
-  //     finalColor: randomColor(),
-  //   });
-  // }, [animatedColors.finalColor]);
+  const colorAnimationCallback = useCallback(() => {
+    setAnimatedColors({
+      initialColor: animatedColors.finalColor,
+      finalColor: randomColor(),
+    });
+  }, [animatedColors.finalColor]);
 
-  // const colorAnimation = useAnimate({
-  //   // iterations: -1,
-  //   ...animateConfig,
-  // });
+  const colorAnimation = useAnimate({
+    ...animateConfig,
+    callback: colorAnimationCallback,
+  });
 
-  // useAnimateParallel({
-  //   animations: [
-  //     // animatedOpacity,
-  //     animatedX,
-  //     animatedY,
-  //     // animatedRotation,
-  //     // colorAnimation,
-  //   ],
-  //   iterations: -1,
-  // });
+  useAnimateParallel({
+    animations: [animatedX, animatedY, animatedRotation],
+    iterations: -1,
+  });
 
-  const updateSettings = useCallback((settings) => {
-    setValues(settings);
-    setShowSettingsMenu(false);
-  }, []);
-
-  // console.log(values);
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <TouchableOpacity onPress={() => setShowSettingsMenu(true)}>
-        <Image source={settingsIcon} style={styles.icon} />
-      </TouchableOpacity>
       <View style={styles.container}>
-        <SettingsMenu
-          visible={showSettingsMenu}
-          settings={values}
-          close={() => setShowSettingsMenu(false)}
-          updateSettings={updateSettings}
-        />
         <Animated.View
           style={[
             styles.box,
             {
-              // opacity: animatedOpacity.animatedValue,
               left: animatedX.animatedValue,
               top: animatedY.animatedValue,
-              // backgroundColor: colorAnimation.interpolate({
-              //   outputRange: [
-              //     animatedColors.initialColor,
-              //     animatedColors.finalColor,
-              //   ],
-              // }),
-              // transform: [
-              //   {
-              //     rotate: animatedRotation.interpolate({
-              //       outputRange: ['0deg', '360deg'],
-              //     }),
-              //   },
-              // ],
+              backgroundColor: colorAnimation.interpolate({
+                outputRange: [
+                  animatedColors.initialColor,
+                  animatedColors.finalColor,
+                ],
+              }),
+              transform: [
+                {
+                  rotate: animatedRotation.interpolate({
+                    outputRange: ['0deg', '360deg'],
+                  }),
+                },
+              ],
             },
           ]}
         />
