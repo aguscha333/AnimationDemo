@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {WHITE, GREY, RED} from '../../constants/colors';
+import {GREY, RED} from '../../constants/colors';
 
 export default StyleSheet.create({
   box: {
@@ -10,12 +10,6 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     alignSelf: 'stretch',
-  },
-  icon: {
-    height: 30,
-    width: 30,
-    tintColor: WHITE,
-    margin: 15,
   },
   safeAreaView: {
     backgroundColor: GREY,
